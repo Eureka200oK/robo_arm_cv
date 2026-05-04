@@ -1,29 +1,28 @@
 import cv2
 import numpy as np
 
-kernel = np.ones((5,5), np.uint8) # creating a kernel of size 5x5 with all values as 1 and data type as unsigned integer 8 bit , this kernel will be used for dilation and erosion
+# remeber this while resizing and cropping always remeber that the image is in (height , width) format and not in (width , height) format as we are used to in mathematics 
+# also first try to know the shape of the image using img.shape and then use that shape to resize or crop the image accordingly
 
-# thes are 5 important basic function in openCV for image processing
+""" img resizing , one thing to notice that the image has 
+[ +y in south direction(↓) and +x in east direction ], 
+    while in mathematics we have 
+[ +y in north direction(↑) and +x in east direction ]
+"""
+img = cv2.imread('Resources/lena.png')
+print(img.shape) # (512, 512, 3) height , width , channels(blue , green , red)
 
-img = cv2.imread("Resources/lena.png")
-# converting the image to grey scale , can also be done by cv2.imread("Resources/lena.png", 0) , but this is more efficient and better way to do it
-imgGrey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-# applying Gaussian blur to the image in which [a,a] a should be an odd number and 0 is the standard deviation in X and Y direction , if we put 0 it will calculate the standard deviation based on the kernel size
-imgBlur = cv2.GaussianBlur(imgGrey, [11,11] , 0)
-# the lesser the threshold value the more edges will be detected and the higher the threshold value the less edges will be detected
-imgCanny = cv2.Canny(imgGrey, 100,100)
-# dilation is used to increase the white region in the image or to increase the size of the foreground object , it is also used to connect the broken parts of an object
-imgDialate = cv2.dilate(imgCanny , kernel , iterations=1)
-# kernel is the matrix which is used to dilate the image and iterations is the number of times we want to dilate the image
-imgErosion = cv2.erode(imgDialate , kernel , iterations=1)
-# erosion is used to decrease the white region in the image or to decrease the size of the foreground object , it is also used to disconnect the connected parts of an object
+imgresize = cv2.resize(img ,[1024,1024]) # [width , height] , here we are resizing the image to 1024 x 1024
+print(imgresize.shape) # (1024, 1024, 3)
 
-cv2.imshow("Image", img)
-cv2.imshow("Image Grey", imgGrey)
-cv2.imshow("Image Blur", imgBlur)
-cv2.imshow("Image Canny", imgCanny)
-cv2.imshow("Image Dialate", imgDialate)
-cv2.imshow("Image Erosion", imgErosion)
+imgcropped = img[0:1000, 250:500] # [y1:y2 , x1:x2] [height , width] , here we are cropping the image from (0,250) to (1000,500)
+print(imgcropped.shape) # (1000, 250, 3)
 
+img_crop_resized = cv2.resize(imgcropped, [img.shape[1],img.shape[0]]) # img.shape[1] is width and img.shape[0] is height , here we are resizing the cropped image to the original image size
+print(img_crop_resized.shape) # (512, 512, 3) 
+
+cv2.imshow('image', img)
+cv2.imshow('resized image', imgresize)
+cv2.imshow('cropped image', imgcropped)
+cv2.imshow('cropped and resized image', img_crop_resized)
 cv2.waitKey(0)
-# waitKey(0) is used to keep the window open until we press any key on the keyboard , if we put a number instead of 0 then the window will close after that many milliseconds
