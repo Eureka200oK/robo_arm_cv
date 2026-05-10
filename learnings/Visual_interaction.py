@@ -1,28 +1,20 @@
 import cv2
 import numpy as np
 
-# remeber this while resizing and cropping always remeber that the image is in (height , width) format and not in (width , height) format as we are used to in mathematics 
-# also first try to know the shape of the image using img.shape and then use that shape to resize or crop the image accordingly
+img = np.zeros((512,700,3),np.uint8)
+# this is a black image of 512x700 pixels with 3 color channels (BGR)
 
-""" img resizing , one thing to notice that the image has 
-[ +y in south direction(↓) and +x in east direction ], 
-    while in mathematics we have 
-[ +y in north direction(↑) and +x in east direction ]
-"""
-img = cv2.imread('Resources/lena.png')
-print(img.shape) # (512, 512, 3) height , width , channels(blue , green , red)
+cv2.rectangle(img,(128,128),(192,256),(0,165,255),cv2.FILLED)
+# this draws a filled rectangle on the image with the top-left corner at (128,128) and the bottom-right corner at (192,256) using the color (0,165,255) which is orange in BGR format.
+cv2.line(img,(128,128),(128,384),(0,165,255),5)
+# this draws a line on the image from the point (128,128) to the point (128,384) using the color (0,165,255) and a thickness of 5 pixels. 
+cv2.line(img,(128,256),(256,384),(0,165,255),5)
+# this draws a line on the image from the point (128,256) to the point (256,384) using the color (0,165,255) and a thickness of 5 pixels.
+cv2.circle(img,(192,192),64,(0,165,255),cv2.FILLED)
+# this draws a filled circle on the image with the center at (192,192) and a radius of 64 pixels using the color (0,165,255).
+cv2.putText(img,'ahul',(256,320),cv2.FONT_HERSHEY_SIMPLEX,5,(0,165,255),2)
+# this puts the text 'ahul' on the image at the position (256,320) using the font cv2.FONT_HERSHEY_SIMPLEX with a font scale of 5, color (0,165,255) and thickness of 2 pixels.
 
-imgresize = cv2.resize(img ,[1024,1024]) # [width , height] , here we are resizing the image to 1024 x 1024
-print(imgresize.shape) # (1024, 1024, 3)
-
-imgcropped = img[0:1000, 250:500] # [y1:y2 , x1:x2] [height , width] , here we are cropping the image from (0,250) to (1000,500)
-print(imgcropped.shape) # (1000, 250, 3)
-
-img_crop_resized = cv2.resize(imgcropped, [img.shape[1],img.shape[0]]) # img.shape[1] is width and img.shape[0] is height , here we are resizing the cropped image to the original image size
-print(img_crop_resized.shape) # (512, 512, 3) 
-
-cv2.imshow('image', img)
-cv2.imshow('resized image', imgresize)
-cv2.imshow('cropped image', imgcropped)
-cv2.imshow('cropped and resized image', img_crop_resized)
+# Finally the Output image is Rahul
+cv2.imshow('image',img)
 cv2.waitKey(0)
